@@ -37,16 +37,71 @@ io:
 
 ### `params`
 
-各置換モジュールに渡すパラメータのセットを定義します。ここで定義した名前を `workflow` や `jobs` から参照します。
+各置換モジュールで使用するパラメータのセットを定義します。このセクションは、処理の「レシピ」集のようなものです。
 
 ```yaml
 params:
-  replace_apple:
-    find_str: "APPLE"
-    replacement_list: ["りんご", "アッポー"]
-  replace_orange:
-    find_str: "ORANGE"
-    replacement_list: ["みかん"]
+  # --- 複数の単語を一度に置換 ---
+  # from: text_multi_replacer_from_lists.py
+  multi_word_replace_params:
+    replacement_rules:
+      - find_string: 'APPLE'
+        replacement_list: ['りんご', '青りんご']
+        loop: true  # loop:true の場合、リストを循環して使用します
+      - find_string: 'ORANGE'
+        replacement_list: ['みかん', 'オレンジ']
+        # loop指定がない場合、リストの最後の要素を使い続けます
+
+  # --- 連番に置換 ---
+  # from: text_replacer_with_sequence.py
+  sequence_replace_params:
+    string_to_find: 'ITEM:'
+    start_number: 1
+    format_string: '項目{}:' # {} の部分が連番に置き換わります
+
+  # --- 単純な文字列置換 ---
+  # from: text_replacer.py
+  simple_replace_params:
+    old_string: "2025"
+    new_string: "2026"
+
+  # --- 左側の文脈を含めて置換 ---
+  # from: text_replacer_with_left_context.py
+  left_context_params:
+    string_to_find: 'キーワード'
+    string_to_replace_with: '【重要】'
+    context_length: 3 # キーワードの左側、最大3文字を含めて置換します
+
+  # --- 右側の文脈を含めて置換 ---
+  # from: text_replacer_with_right_context.py
+  right_context_params:
+    string_to_find: 'です'
+    string_to_replace_with: 'でした。'
+    context_length: 1 # 「です」の右側、最大1文字(。)を含めて置換します
+
+  # --- 複雑なパターンで置換 (from: text_replacer_with_complex_pattern.py) ---
+  complex_pattern_params:
+    string_to_find_1: '開始'
+    string_to_find_2: '終了'
+    string_to_replace_with: '【パターンマッチ】'
+    min_len: 3
+    max_len: 5 # 3～5文字の範囲にマッチ
+
+  # --- リストから順番に置換 ---
+  # from: text_replacer_from_list.py
+  sequential_list_params:
+    string_to_find: 'LIST_REPLACE'
+    replacement_list: ['A', 'B', 'C']
+    loop: true # loop:true の場合、リストを循環して使用します
+
+  # --- 回数ベースでリストから置換 ---
+  # from: text_replacer_with_count_based_list.py
+  count_based_list_params:
+    string_to_find: 'COUNT_TARGET'
+    replacement_rules:
+      - ['FIRST', 2]  # 1-2回目
+      - ['SECOND', 4] # 3-4回目
+      - ['THIRD', 5]  # 5回目以降
 ```
 
 ### `workflow`
