@@ -4,7 +4,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from PyReplacer.text_replacer_with_complex_pattern import replace_complex_pattern
+from src.text_replacer_with_complex_pattern import replace_complex_pattern
 
 class TestComplexPatternReplacer(unittest.TestCase):
     def test_fixed_length(self):

@@ -4,7 +4,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from PyReplacer.text_multi_replacer_from_lists import multi_replace_from_lists
+from src.text_multi_replacer_from_lists import multi_replace_from_lists
 
 class TestMultiListReplacer(unittest.TestCase):
     def test_multiple_rules(self):

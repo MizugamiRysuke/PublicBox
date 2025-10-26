@@ -4,7 +4,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from PyReplacer.text_replacer_with_sequence import replace_string_with_sequence
+from src.text_replacer_with_sequence import replace_string_with_sequence
 
 class TestSequenceReplacer(unittest.TestCase):
     """

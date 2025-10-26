@@ -4,7 +4,7 @@ import os
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from PyReplacer.text_replacer_with_left_context import replace_string_with_left_context
+from src.text_replacer_with_left_context import replace_string_with_left_context
 
 class TestLeftContextReplacer(unittest.TestCase):
     def test_basic_left_context(self):

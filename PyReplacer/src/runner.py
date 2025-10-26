@@ -11,14 +11,14 @@ import copy
 
 # 1. 利用するライブラリ関数をすべてインポートする
 # -----------------------------------------------------------------
-from text_replacer import replace_string_in_text
-from text_replacer_with_sequence import replace_string_with_sequence
-from text_replacer_with_left_context import replace_string_with_left_context
-from text_replacer_with_right_context import replace_string_with_right_context
-from text_replacer_with_complex_pattern import replace_complex_pattern
-from text_replacer_from_list import replace_string_from_list
-from text_replacer_with_count_based_list import replace_string_with_count_based_list
-from text_multi_replacer_from_lists import multi_replace_from_lists
+from .text_replacer import replace_string_in_text
+from .text_replacer_with_sequence import replace_string_with_sequence
+from .text_replacer_with_left_context import replace_string_with_left_context
+from .text_replacer_with_right_context import replace_string_with_right_context
+from .text_replacer_with_complex_pattern import replace_complex_pattern
+from .text_replacer_from_list import replace_string_from_list
+from .text_replacer_with_count_based_list import replace_string_with_count_based_list
+from .text_multi_replacer_from_lists import multi_replace_from_lists
 
 # 2. 文字列名と関数オブジェクトを対応付ける辞書
 # -----------------------------------------------------------------
@@ -94,7 +94,7 @@ def main():
     """
     config.yaml を読み込み、定義されたジョブまたは単一ワークフローを実行します。
     """
-    config_path = "config.yaml"
+    config_path = "../config.yaml"
 
     # --- 設定ファイルの読み込み ---
     print(f"'{config_path}' を読み込みます...")
@@ -115,13 +115,13 @@ def main():
     jobs = config.get("jobs")
 
     # --- 入力ファイルの読み込み ---
-    input_path = base_io.get("input_path", "input.txt")
+    input_path = os.path.join("..", base_io.get("input_path", "input.txt"))
     print(f"入力ファイル '{input_path}' を読み込みます...")
     try:
         with open(input_path, "r", encoding="utf-8") as f:
             initial_text = f.read()
     except FileNotFoundError:
-        if input_path == "sample_input.txt":
+        if input_path == os.path.join("..", "sample_input.txt"):
             print(f"'{input_path}' が見つからないため、サンプルを生成します。")
             initial_text = """# テスト用総合入力ファイル
 
@@ -176,7 +176,7 @@ LIST_REPLACE LIST_REPLACE LIST_REPLACE LIST_REPLACE LIST_REPLACE
             if "workflow" in overrides:
                 current_workflow = overrides["workflow"]
             
-            output_path = base_io.get("output_path", "output.txt").format(job_name=job_name)
+            output_path = os.path.join("..", base_io.get("output_path", "output.txt").format(job_name=job_name))
             
             print("--- 元のテキスト ---")
             print(initial_text)
@@ -188,7 +188,7 @@ LIST_REPLACE LIST_REPLACE LIST_REPLACE LIST_REPLACE LIST_REPLACE
     else:
         # --- 単一実行モード ---
         print("\n単一実行モードで実行します。")
-        output_path = base_io.get("output_path", "output.txt").format(job_name="single")
+        output_path = os.path.join("..", base_io.get("output_path", "output.txt").format(job_name="single"))
         print("--- 元のテキスト ---")
         print(initial_text)
         run_workflow(initial_text, base_workflow, base_params, output_path)

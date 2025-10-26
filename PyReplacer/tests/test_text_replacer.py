@@ -5,7 +5,7 @@ import os
 # 親ディレクトリ(toolcode)をPythonのパスに追加して、PyReplacerパッケージをインポートできるようにする
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from PyReplacer.text_replacer import replace_string_in_text
+from src.text_replacer import replace_string_in_text
 
 class TestSimpleReplacer(unittest.TestCase):
     """
