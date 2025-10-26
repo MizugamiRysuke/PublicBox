@@ -4,8 +4,8 @@
 
 ## プログラムの構成
 
-*   `runner.py`: メインの実行スクリプト。`config.yaml` を読み込み、定義されたジョブとワークフローを実行します。
-*   `text_replacer_*.py`: それぞれが特定の置換機能を提供するモジュールです。
+*   `src/runner.py`: メインの実行スクリプト。`config.yaml` を読み込み、定義されたジョブとワークフローを実行します。
+*   `src/text_replacer_*.py`: それぞれが特定の置換機能を提供するモジュールです。
     *   `text_replacer.py`: 単純な文字列置換
     *   `text_replacer_from_list.py`: リストの要素で順番に置換
     *   `text_multi_replacer_from_lists.py`: 複数のルールリストに基づいて置換
@@ -14,6 +14,9 @@
     *   `text_replacer_with_left_context.py`: キーワードの左側の文脈を含めて置換
     *   `text_replacer_with_right_context.py`: キーワードの右側の文脈を含めて置換
     *   `text_replacer_with_sequence.py`: 連番で置換
+*   `tests/`: 各モジュールの単体テスト。
+*   `config.yaml`: 置換処理の動作を定義する設定ファイル。
+*   `README.md`: このファイル。
 
 ## `config.yaml` の主要セクション
 
@@ -78,10 +81,10 @@ jobs:
 
 ## 実行方法
 
-1.  `config.yaml` をプロジェクトのルートに配置します。
+1.  `PyReplacer` ディレクトリに `config.yaml` を配置します。
 2.  入力ファイルを準備します。
-3.  以下のコマンドを実行します。
+3.  プロジェクトのルートディレクトリ（`PublicBox`）から、以下のコマンドを実行します。
 
     ```bash
-    python PyReplacer/runner.py
+    python3 -m PyReplacer.src.runner
     ```
