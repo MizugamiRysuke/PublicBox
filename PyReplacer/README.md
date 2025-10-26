@@ -6,13 +6,11 @@
 
 *   `src/runner.py`: メインの実行スクリプト。`config.yaml` を読み込み、定義されたジョブとワークフローを実行します。
 *   `src/text_replacer_*.py`: それぞれが特定の置換機能を提供するモジュールです。
-    *   `text_replacer.py`: 単純な文字列置換
+    *   `text_replacer_contextual.py`: 単純な文字列置換、および左右の文脈を含めた置換（統合版）
     *   `text_replacer_from_list.py`: リストの要素で順番に置換
     *   `text_multi_replacer_from_lists.py`: 複数のルールリストに基づいて置換
     *   `text_replacer_with_complex_pattern.py`: 可変長のワイルドカードを含む複雑なパターンで置換
     *   `text_replacer_with_count_based_list.py`: 文字列の出現回数に基づいて置換
-    *   `text_replacer_with_left_context.py`: キーワードの左側の文脈を含めて置換
-    *   `text_replacer_with_right_context.py`: キーワードの右側の文脈を含めて置換
     *   `text_replacer_with_sequence.py`: 連番で置換
 *   `tests/`: 各モジュールの単体テスト。
 *   `config.yaml`: 置換処理の動作を定義する設定ファイル。
@@ -59,25 +57,21 @@ params:
     start_number: 1
     format_string: '項目{}:' # {} の部分が連番に置き換わります
 
-  # --- 単純な文字列置換 ---
-  # from: text_replacer.py
-  simple_replace_params:
-    old_string: "2025"
-    new_string: "2026"
+  # --- 文脈に応じて置換（統合版） ---
+  # from: text_replacer_contextual.py
+  simple_contextual_params:
+    string_to_find: "2025"
+    string_to_replace_with: "2026"
 
-  # --- 左側の文脈を含めて置換 ---
-  # from: text_replacer_with_left_context.py
   left_context_params:
     string_to_find: 'キーワード'
     string_to_replace_with: '【重要】'
-    context_length: 3 # キーワードの左側、最大3文字を含めて置換します
+    left_context_length: 3 # キーワードの左側、最大3文字を含めて置換します
 
-  # --- 右側の文脈を含めて置換 ---
-  # from: text_replacer_with_right_context.py
   right_context_params:
     string_to_find: 'です'
     string_to_replace_with: 'でした。'
-    context_length: 1 # 「です」の右側、最大1文字(。)を含めて置換します
+    right_context_length: 1 # 「です」の右側、最大1文字(。)を含めて置換します
 
   # --- 複雑なパターンで置換 (from: text_replacer_with_complex_pattern.py) ---
   complex_pattern_params:
@@ -106,14 +100,14 @@ params:
 
 ### `workflow`
 
-実行する置換処理のシーケンス（ワークフロー）をリストで定義します。各ステップでは、使用するモジュールと、`params` で定義したパラメータセットへの参照 (`params_ref`) を指定します。
+実行する置換処理のシーケンス（ワークフロー）をリストで定義します。各ステップでは、使用するモジュールと、`params` で定義したパラメータセットへの参照 (`param_set`) を指定します。
 
 ```yaml
 workflow:
-  - module: "text_replacer_from_list"
-    params_ref: "replace_apple"
-  - module: "text_replacer_from_list"
-    params_ref: "replace_orange"
+  - function: "replace_string_contextual"
+    param_set: "simple_contextual_params"
+  - function: "replace_string_contextual"
+    param_set: "left_context_params"
 ```
 
 ### `jobs`
@@ -125,13 +119,13 @@ jobs:
   job1:
     overrides:
       params:
-        replace_apple:
-          replacement_list: ["林檎"] # job1ではこのリストを使用
+        simple_contextual_params:
+          string_to_replace_with: "2028" # job1ではこの値を使用
   job2:
     overrides:
       workflow: # job2ではこのワークフローを適用
-        - module: "text_replacer"
-          params_ref: "some_other_params"
+        - function: "multi_replace_from_lists"
+          param_set: "multi_word_replace_params"
 ```
 
 ## 実行方法
