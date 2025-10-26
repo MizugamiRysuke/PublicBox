@@ -76,11 +76,39 @@ params:
       - ['SECOND', 4] # 3-4回目
       - ['THIRD', 5]  # 5回目以降
 
+  # --- 究極の置換 ---
+  # from: text_replacer_ultimate.py
+  ultimate_replace_params:
+    # 正規表現のグループとしてキャプチャする各パートを定義します
+    # グループ1 (\1): 左文脈
+    left_context_len: 8
+    # グループ2 (\2): 文字列1
+    string_to_find_1: "[重要]"
+    # グループ3 (\3): 中間文字列
+    middle_min_len: 10
+    middle_max_len: 15
+    # グループ4 (\4): 文字列2
+    string_to_find_2: "[/重要]"
+    # グループ5 (\5): 右文脈
+    right_context_len: 8
+    
+    # replacement_format_string:
+    # 上記でキャプチャしたグループ(\1〜\5)を使い、置換後の文字列を自由に組み立てます。
+    # 注意: YAML内ではバックスラッシュを2つ重ねて \1 のように記述します。
+    #
+    # 例1: 全く変更しない場合 -> "\\1\\2\\3\\4\\5"
+    # 例2: 中身だけを抽出する場合 -> "\\3"
+    # 例3: パーツを再配置する場合 -> "【\\2と\\4の間】\\3【もともとの文脈】\\1 ... \\5"
+    #
+    replacement_format_string: "【中身】\3【文脈】(\1) (\5)【タグ】\2 \4"
+
 # 3. ベースとなるデフォルトのワークフロー
 # -----------------------------------------------------------------
 # jobsセクションが存在しない場合、またはjobsの各ジョブで
 # workflowが上書きされない場合に、このワークフローが実行されます。
 workflow:
+  - function: "replace_ultimate"
+    param_set: "ultimate_replace_params"
   - function: "multi_replace_from_lists"
     param_set: "multi_word_replace_params"
   - function: "replace_string_with_sequence"

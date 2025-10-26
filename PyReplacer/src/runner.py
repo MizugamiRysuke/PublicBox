@@ -17,6 +17,7 @@ from .text_replacer_from_list import replace_string_from_list
 from .text_replacer_with_count_based_list import replace_string_with_count_based_list
 from .text_multi_replacer_from_lists import multi_replace_from_lists
 from .text_replacer_contextual import replace_string_contextual
+from .text_replacer_ultimate import replace_ultimate
 
 # 2. 文字列名と関数オブジェクトを対応付ける辞書
 # -----------------------------------------------------------------
@@ -29,6 +30,7 @@ AVAILABLE_FUNCTIONS = {
     "replace_string_with_count_based_list": replace_string_with_count_based_list,
     "multi_replace_from_lists": multi_replace_from_lists,
     "replace_string_contextual": replace_string_contextual,
+    "replace_ultimate": replace_ultimate,
 }
 
 # 3. ワークフロー実行ヘルパー関数

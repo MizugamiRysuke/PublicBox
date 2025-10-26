@@ -12,6 +12,7 @@
     *   `text_replacer_with_complex_pattern.py`: 可変長のワイルドカードを含む複雑なパターンで置換
     *   `text_replacer_with_count_based_list.py`: 文字列の出現回数に基づいて置換
     *   `text_replacer_with_sequence.py`: 連番で置換
+    *   `text_replacer_ultimate.py`: 5つのパート（左文脈、文字列1、中間、文字列2、右文脈）をキャプチャし、自由に再配置・置換する究極の置換機能
 *   `tests/`: 各モジュールの単体テスト。
 *   `config.yaml`: 置換処理の動作を定義する設定ファイル。
 *   `README.md`: このファイル。
@@ -40,62 +41,38 @@ io:
 ```yaml
 params:
   # --- 複数の単語を一度に置換 ---
-  # from: text_multi_replacer_from_lists.py
   multi_word_replace_params:
     replacement_rules:
       - find_string: 'APPLE'
         replacement_list: ['りんご', '青りんご']
-        loop: true  # loop:true の場合、リストを循環して使用します
-      - find_string: 'ORANGE'
-        replacement_list: ['みかん', 'オレンジ']
-        # loop指定がない場合、リストの最後の要素を使い続けます
 
   # --- 連番に置換 ---
-  # from: text_replacer_with_sequence.py
   sequence_replace_params:
     string_to_find: 'ITEM:'
     start_number: 1
-    format_string: '項目{}:' # {} の部分が連番に置き換わります
+    format_string: '項目{}:'
 
   # --- 文脈に応じて置換（統合版） ---
-  # from: text_replacer_contextual.py
   simple_contextual_params:
     string_to_find: "2025"
     string_to_replace_with: "2026"
 
-  left_context_params:
-    string_to_find: 'キーワード'
-    string_to_replace_with: '【重要】'
-    left_context_length: 3 # キーワードの左側、最大3文字を含めて置換します
-
-  right_context_params:
-    string_to_find: 'です'
-    string_to_replace_with: 'でした。'
-    right_context_length: 1 # 「です」の右側、最大1文字(。)を含めて置換します
-
-  # --- 複雑なパターンで置換 (from: text_replacer_with_complex_pattern.py) ---
-  complex_pattern_params:
-    string_to_find_1: '開始'
-    string_to_find_2: '終了'
-    string_to_replace_with: '【パターンマッチ】'
-    min_len: 3
-    max_len: 5 # 3～5文字の範囲にマッチ
-
-  # --- リストから順番に置換 ---
-  # from: text_replacer_from_list.py
-  sequential_list_params:
-    string_to_find: 'LIST_REPLACE'
-    replacement_list: ['A', 'B', 'C']
-    loop: true # loop:true の場合、リストを循環して使用します
-
-  # --- 回数ベースでリストから置換 ---
-  # from: text_replacer_with_count_based_list.py
-  count_based_list_params:
-    string_to_find: 'COUNT_TARGET'
-    replacement_rules:
-      - ['FIRST', 2]  # 1-2回目
-      - ['SECOND', 4] # 3-4回目
-      - ['THIRD', 5]  # 5回目以降
+  # --- 究極の置換 ---
+  # from: text_replacer_ultimate.py
+  ultimate_replace_params:
+    # \1: left_context_len で指定した左文脈
+    left_context_len: 8
+    # \2: string_to_find_1 で指定した文字列
+    string_to_find_1: "[重要]"
+    # \3: 中間文字列
+    middle_min_len: 10
+    middle_max_len: 15
+    # \4: string_to_find_2 で指定した文字列
+    string_to_find_2: "[/重要]"
+    # \5: right_context_len で指定した右文脈
+    right_context_len: 8
+    # 置換フォーマット (YAML内では \1 のようにバックスラッシュを2つ重ねて記述します)
+    replacement_format_string: "【中身】\3【文脈】(\1) (\5)【タグ】\2 \4"
 ```
 
 ### `workflow`
@@ -104,10 +81,10 @@ params:
 
 ```yaml
 workflow:
+  - function: "replace_ultimate"
+    param_set: "ultimate_replace_params"
   - function: "replace_string_contextual"
     param_set: "simple_contextual_params"
-  - function: "replace_string_contextual"
-    param_set: "left_context_params"
 ```
 
 ### `jobs`
@@ -121,11 +98,6 @@ jobs:
       params:
         simple_contextual_params:
           string_to_replace_with: "2028" # job1ではこの値を使用
-  job2:
-    overrides:
-      workflow: # job2ではこのワークフローを適用
-        - function: "multi_replace_from_lists"
-          param_set: "multi_word_replace_params"
 ```
 
 ## 実行方法
