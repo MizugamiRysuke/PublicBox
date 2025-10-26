@@ -1,2 +1,4 @@
 __pycache__/
 *.pyc
+output_*.txt
+sample_input.txt
