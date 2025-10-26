@@ -1,0 +1,25 @@
+# テスト用総合入力ファイル
+
+## フルーツリスト
+- APPLE
+- ORANGE
+- APPLE
+- ORANGE
+- APPLE
+
+## ノート
+ITEM: これは重要なキーワードです。
+ITEM: これもキーワードです。
+ITEM: これもキーワードです。
+
+## パターン
+これは開始...終了というパターンと、開始....終了(4文字)、そして開始.....終了(5文字)のパターンです。
+
+## カウントベース
+COUNT_TARGET COUNT_TARGET COUNT_TARGET COUNT_TARGET COUNT_TARGET
+
+## リスト置換
+LIST_REPLACE LIST_REPLACE LIST_REPLACE LIST_REPLACE LIST_REPLACE
+
+## フッター
+(C) 2025 My Memo
