@@ -11,28 +11,24 @@ import copy
 
 # 1. 利用するライブラリ関数をすべてインポートする
 # -----------------------------------------------------------------
-from .text_replacer import replace_string_in_text
 from .text_replacer_with_sequence import replace_string_with_sequence
-from .text_replacer_with_left_context import replace_string_with_left_context
-from .text_replacer_with_right_context import replace_string_with_right_context
 from .text_replacer_with_complex_pattern import replace_complex_pattern
 from .text_replacer_from_list import replace_string_from_list
 from .text_replacer_with_count_based_list import replace_string_with_count_based_list
 from .text_multi_replacer_from_lists import multi_replace_from_lists
+from .text_replacer_contextual import replace_string_contextual
 
 # 2. 文字列名と関数オブジェクトを対応付ける辞書
 # -----------------------------------------------------------------
 # config.yaml の "function" 文字列と、実際の関数をここで紐付けます。
 # 新しいライブラリを追加した場合は、ここにも登録します。
 AVAILABLE_FUNCTIONS = {
-    "replace_string_in_text": replace_string_in_text,
     "replace_string_with_sequence": replace_string_with_sequence,
-    "replace_string_with_left_context": replace_string_with_left_context,
-    "replace_string_with_right_context": replace_string_with_right_context,
     "replace_complex_pattern": replace_complex_pattern,
     "replace_string_from_list": replace_string_from_list,
     "replace_string_with_count_based_list": replace_string_with_count_based_list,
     "multi_replace_from_lists": multi_replace_from_lists,
+    "replace_string_contextual": replace_string_contextual,
 }
 
 # 3. ワークフロー実行ヘルパー関数

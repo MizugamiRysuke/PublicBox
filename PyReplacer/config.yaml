@@ -36,25 +36,21 @@ params:
     start_number: 1
     format_string: '項目{}:' # {} の部分が連番に置き換わります
 
-  # --- 単純な文字列置換 ---
-  # from: text_replacer.py
-  simple_replace_params:
-    old_string: "2025"
-    new_string: "2026"
+  # --- 文脈に応じて置換（統合版） ---
+  # from: text_replacer_contextual.py
+  simple_contextual_params:
+    string_to_find: "2025"
+    string_to_replace_with: "2026"
 
-  # --- 左側の文脈を含めて置換 ---
-  # from: text_replacer_with_left_context.py
   left_context_params:
     string_to_find: 'キーワード'
     string_to_replace_with: '【重要】'
-    context_length: 3 # キーワードの左側、最大3文字を含めて置換します
+    left_context_length: 3 # キーワードの左側、最大3文字を含めて置換します
 
-  # --- 右側の文脈を含めて置換 ---
-  # from: text_replacer_with_right_context.py
   right_context_params:
     string_to_find: 'です'
     string_to_replace_with: 'でした。'
-    context_length: 1 # 「です」の右側、最大1文字(。)を含めて置換します
+    right_context_length: 1 # 「です」の右側、最大1文字(。)を含めて置換します
 
   # --- 複雑なパターンで置換 (from: text_replacer_with_complex_pattern.py) ---
   complex_pattern_params:
@@ -89,10 +85,12 @@ workflow:
     param_set: "multi_word_replace_params"
   - function: "replace_string_with_sequence"
     param_set: "sequence_replace_params"
-  - function: "replace_string_in_text"
-    param_set: "simple_replace_params"
-  - function: "replace_string_with_left_context"
+  - function: "replace_string_contextual"
+    param_set: "simple_contextual_params"
+  - function: "replace_string_contextual"
     param_set: "left_context_params"
+  - function: "replace_string_contextual"
+    param_set: "right_context_params"
   - function: "replace_complex_pattern"
     param_set: "complex_pattern_params"
   - function: "replace_string_from_list"
@@ -110,8 +108,8 @@ jobs:
   full_workflow_for_2028:
     overrides:
       params:
-        simple_replace_params:
-          new_string: "2028"
+        simple_contextual_params:
+          string_to_replace_with: "2028"
   
   # --- ジョブ2: ワークフローの上書き ---
   # フルーツ置換とリスト置換だけを実行する、全く別の処理を行うジョブ
