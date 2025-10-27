@@ -2,20 +2,48 @@
 
 `config.yaml` ファイルで定義された一連のルールに基づいて、テキストファイル内の文字列を置換するためのPythonスクリプト群です。
 
-## プログラムの構成
+## Features
 
-*   `src/runner.py`: メインの実行スクリプト。`config.yaml` を読み込み、定義されたジョブとワークフローを実行します。
-*   `src/text_replacer_*.py`: それぞれが特定の置換機能を提供するモジュールです。
-    *   `text_replacer_contextual.py`: 単純な文字列置換、および左右の文脈を含めた置換（統合版）
-    *   `text_replacer_from_list.py`: リストの要素で順番に置換
-    *   `text_multi_replacer_from_lists.py`: 複数のルールリストに基づいて置換
-    *   `text_replacer_with_complex_pattern.py`: 可変長のワイルドカードを含む複雑なパターンで置換
-    *   `text_replacer_with_count_based_list.py`: 文字列の出現回数に基づいて置換
-    *   `text_replacer_with_sequence.py`: 連番で置換
-    *   `text_replacer_ultimate.py`: 5つのパート（左文脈、文字列1、中間、文字列2、右文脈）をキャプチャし、自由に再配置・置換する究極の置換機能
-*   `tests/`: 各モジュールの単体テスト。
-*   `config.yaml`: 置換処理の動作を定義する設定ファイル。
-*   `README.md`: このファイル。
+- **Simple List-Based Replacement**: Replace strings based on a provided list of old and new values.
+- **Contextual Replacement**: Perform replacements only when specific surrounding text patterns are met.
+- **Complex Pattern Replacement**: Utilize regular expressions for advanced pattern matching and substitution.
+- **Count-Based Replacement**: Replace occurrences up to a specified count.
+- **Sequence-Based Replacement**: Replace text with a sequence of values.
+- **Multi-Replacer from Lists**: Apply multiple list-based replacements in a single pass.
+- **Ultimate Replacer**: A comprehensive replacer combining various strategies.
+
+## Installation
+
+To get started with PyReplacer, clone the repository and navigate into the project directory:
+
+```bash
+git clone https://github.com/your-username/PyReplacer.git
+cd PyReplacer
+```
+
+Install the necessary dependencies:
+
+```bash
+pip install pyyaml
+```
+
+If there are any other specific dependencies, you can install them using pip:
+
+```bash
+pip install -r requirements.txt
+```
+
+(Note: If `requirements.txt` does not exist, the last step can be skipped or adapted based on project needs.)
+
+## Modules
+
+- `text_replacer_contextual.py`: 単純な文字列置換、および左右の文脈を含めた置換（統合版）
+- `text_replacer_from_list.py`: リストの要素で順番に置換
+- `text_multi_replacer_from_lists.py`: 複数のルールリストに基づいて置換
+- `text_replacer_with_complex_pattern.py`: 可変長のワイルドカードを含む複雑なパターンで置換
+- `text_replacer_with_count_based_list.py`: 文字列の出現回数に基づいて置換
+- `text_replacer_with_sequence.py`: 連番で置換
+- `text_replacer_ultimate.py`: 5つのパート（左文脈、文字列1、中間、文字列2、右文脈）をキャプチャし、自由に再配置・置換する究極の置換機能
 
 ## `config.yaml` の主要セクション
 
