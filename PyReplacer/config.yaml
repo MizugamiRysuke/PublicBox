@@ -8,10 +8,10 @@
 # 1. ベースとなるI/O (入出力) 設定
 # -----------------------------------------------------------------
 io:
-  input_path: "sample_input.txt"
+  input_path: 'sample_input.txt'
   # 出力ファイル名には {job_name} というプレースホルダーが使用できます。
   # jobsセクションが実行される際、このプレースホルダーはジョブ名に置き換えられます。
-  output_path: "output_{job_name}.txt" 
+  output_path: 'output_{job_name}.txt'
 
 # 2. 再利用可能なパラメータセットの定義
 # -----------------------------------------------------------------
@@ -24,7 +24,7 @@ params:
     replacement_rules:
       - find_string: 'APPLE'
         replacement_list: ['りんご', '青りんご']
-        loop: true  # loop:true の場合、リストを循環して使用します
+        loop: true # loop:true の場合、リストを循環して使用します
       - find_string: 'ORANGE'
         replacement_list: ['みかん', 'オレンジ']
         # loop指定がない場合、リストの最後の要素を使い続けます
@@ -39,8 +39,8 @@ params:
   # --- 文脈に応じて置換（統合版） ---
   # from: text_replacer_contextual.py
   simple_contextual_params:
-    string_to_find: "2025"
-    string_to_replace_with: "2026"
+    string_to_find: '2025'
+    string_to_replace_with: '2026'
 
   left_context_params:
     string_to_find: 'キーワード'
@@ -72,9 +72,9 @@ params:
   count_based_list_params:
     string_to_find: 'COUNT_TARGET'
     replacement_rules:
-      - ['FIRST', 2]  # 1-2回目
+      - ['FIRST', 2] # 1-2回目
       - ['SECOND', 4] # 3-4回目
-      - ['THIRD', 5]  # 5回目以降
+      - ['THIRD', 5] # 5回目以降
 
   # --- 究極の置換 ---
   # from: text_replacer_ultimate.py
@@ -83,15 +83,15 @@ params:
     # グループ1 (\1): 左文脈
     left_context_len: 8
     # グループ2 (\2): 文字列1
-    string_to_find_1: "[重要]"
+    string_to_find_1: '[重要]'
     # グループ3 (\3): 中間文字列
     middle_min_len: 10
     middle_max_len: 15
     # グループ4 (\4): 文字列2
-    string_to_find_2: "[/重要]"
+    string_to_find_2: '[/重要]'
     # グループ5 (\5): 右文脈
     right_context_len: 8
-    
+
     # replacement_format_string:
     # 上記でキャプチャしたグループ(\1〜\5)を使い、置換後の文字列を自由に組み立てます。
     # 注意: YAML内ではバックスラッシュを2つ重ねて \1 のように記述します。
@@ -100,31 +100,31 @@ params:
     # 例2: 中身だけを抽出する場合 -> "\\3"
     # 例3: パーツを再配置する場合 -> "【\\2と\\4の間】\\3【もともとの文脈】\\1 ... \\5"
     #
-    replacement_format_string: "【中身】\3【文脈】(\1) (\5)【タグ】\2 \4"
+    replacement_format_string: "【中身】\\3【文脈】(\\1) (\\5)【タグ】\\2 \\4"
 
 # 3. ベースとなるデフォルトのワークフロー
 # -----------------------------------------------------------------
 # jobsセクションが存在しない場合、またはjobsの各ジョブで
 # workflowが上書きされない場合に、このワークフローが実行されます。
 workflow:
-  - function: "replace_ultimate"
-    param_set: "ultimate_replace_params"
-  - function: "multi_replace_from_lists"
-    param_set: "multi_word_replace_params"
-  - function: "replace_string_with_sequence"
-    param_set: "sequence_replace_params"
-  - function: "replace_string_contextual"
-    param_set: "simple_contextual_params"
-  - function: "replace_string_contextual"
-    param_set: "left_context_params"
-  - function: "replace_string_contextual"
-    param_set: "right_context_params"
-  - function: "replace_complex_pattern"
-    param_set: "complex_pattern_params"
-  - function: "replace_string_from_list"
-    param_set: "sequential_list_params"
-  - function: "replace_string_with_count_based_list"
-    param_set: "count_based_list_params"
+  - function: 'replace_ultimate'
+    param_set: 'ultimate_replace_params'
+  - function: 'multi_replace_from_lists'
+    param_set: 'multi_word_replace_params'
+  - function: 'replace_string_with_sequence'
+    param_set: 'sequence_replace_params'
+  - function: 'replace_string_contextual'
+    param_set: 'simple_contextual_params'
+  - function: 'replace_string_contextual'
+    param_set: 'left_context_params'
+  - function: 'replace_string_contextual'
+    param_set: 'right_context_params'
+  - function: 'replace_complex_pattern'
+    param_set: 'complex_pattern_params'
+  - function: 'replace_string_from_list'
+    param_set: 'sequential_list_params'
+  - function: 'replace_string_with_count_based_list'
+    param_set: 'count_based_list_params'
 
 # 4. 実行ジョブの定義
 # -----------------------------------------------------------------
@@ -137,14 +137,14 @@ jobs:
     overrides:
       params:
         simple_contextual_params:
-          string_to_replace_with: "2028"
-  
+          string_to_replace_with: '2028'
+
   # --- ジョブ2: ワークフローの上書き ---
   # フルーツ置換とリスト置換だけを実行する、全く別の処理を行うジョブ
   fruits_and_list_only:
     overrides:
       workflow:
-        - function: "multi_replace_from_lists"
-          param_set: "multi_word_replace_params"
-        - function: "replace_string_from_list"
-          param_set: "sequential_list_params"
+        - function: 'multi_replace_from_lists'
+          param_set: 'multi_word_replace_params'
+        - function: 'replace_string_from_list'
+          param_set: 'sequential_list_params'
